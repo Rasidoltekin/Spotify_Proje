@@ -10,10 +10,10 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { useDispatch, useSelector } from 'react-redux';
 import { pauseSong, resumeSong, nextSong, previousSong } from '../store/features/player/playerSlice';
 import { toggleLibrary } from '../store/features/library/librarySlice';
-import { useState,useEffect } from 'react';
+import { useState,useEffect, useRef } from 'react';
 import Slider from '@mui/material/Slider';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
-
+import { getAudioUrl } from '../utils/audioHelper';
 
 
 function formatTime(seconds) {
@@ -39,6 +39,8 @@ function Player() {
     const isInLibrary = currentTrack
         ? items.some((item) => item.title === currentTrack.title)
         : false;
+
+    const audioRef = useRef(null);
 
     
     useEffect(() => {
@@ -91,6 +93,30 @@ function Player() {
     };
 
 
+    useEffect(() => {
+        if (!currentTrack || !audioRef.current) return;
+
+        const url = getAudioUrl(currentTrack);
+        audioRef.current.src = url;
+        audioRef.current.load();
+
+        if (isPlaying) {
+          audioRef.current.play().catch(() => {});
+        }
+    }, [currentIndex, queue])
+
+
+    useEffect(() => {
+        if (!audioRef.current) return;
+
+        if (isPlaying) {
+          audioRef.current.play().catch(() => {});
+        } else {
+          audioRef.current.pause();
+        }
+    }, [isPlaying]);
+
+
     return (
         <Box 
         sx={{
@@ -99,10 +125,14 @@ function Player() {
             justifyContent: 'space-between',
             backgroundColor: '#282828',
             color: '#fff',
-            px: 2,
-            py:1,
+            width: '100%',
+            height: '96px',
+            px:2,
+            boxsizing: 'border-box',
         }}
         >
+            <audio ref={audioRef} />
+
 
         <Box sx={{ display:'flex', alignItems: 'center', gap:1, width: { xs: 100, sm: 150, md: 200 }}}>
             <Box>

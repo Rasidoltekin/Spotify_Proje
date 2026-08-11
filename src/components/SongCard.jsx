@@ -8,10 +8,12 @@ import IconButton from '@mui/material/IconButton';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import PauseIcon from '@mui/icons-material/Pause';
 import Box from '@mui/material/Box';
+import { useState } from 'react';
 
 
 function SongCard({ title, subtitle, image, queue, index}) {
   const dispatch = useDispatch();
+  const [imageError, setImageError] = useState(false);
 
   const { queue: currentQueue, currentIndex, isPlaying } =useSelector((state)=> state.player);
 
@@ -50,6 +52,8 @@ function SongCard({ title, subtitle, image, queue, index}) {
             color: '#fff',
             cursor: 'pointer',
             p: '16px',
+            overflow: 'hidden',      
+             boxSizing: 'border-box',
             transition: 'transform 0.2s, background-color 0.2s',
             '&:hover':{
               transform:'scale(1.03)',
@@ -59,16 +63,42 @@ function SongCard({ title, subtitle, image, queue, index}) {
         >
           <Box sx={{ position:'relative'}}>
 
-          
-            <CardMedia
-            component="img"
-            sx={{ width: '100%',
-              aspectRatio: '1 / 1',  
-              borderRadius: '4px', 
-            }}
-            image={image}
-            alt={title}
-         />
+            {imageError ? (
+              <Box
+                sx={{
+                  width: '100%',
+                  aspectRatio: '1/1',
+                  borderRadius:'4px',
+                  backgroundColor:'#282828',
+                  display:'flex',
+                  alignItems:'center',
+                  justifyContent:'center',
+                  textAlign:'center',
+                  p:1,
+
+
+                }}
+                >
+                  <Typography variant=  "caption" sx={{ color: '#b3b3b3' }}>
+                    Görsel yüklenemedi
+
+                  </Typography>
+                  </Box>
+            ) : (
+              <CardMedia
+                component='img'
+                sx={{
+                  width: '100%',
+                  aspectRatio: '1/1',
+                  borderRadius: '4px',
+                  objectFit: 'cover',
+                }}
+                image={image}
+                alt={title}
+                onError={() => setImageError(true)}
+                />
+            )}
+            
 
             <IconButton
              onClick={(e) => {
