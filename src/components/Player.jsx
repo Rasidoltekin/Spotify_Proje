@@ -44,26 +44,28 @@ function Player() {
     useEffect(() => {
         if (!isPlaying || !currentTrack) return;
 
-        const interval = setInterval(()=> {
-            setCurrentTime((prev)=> {
-                if ( prev >= duration) return 0;
-                return prev + 1;
-            });
-        }, 1000);
 
-        return() => clearInterval(interval);
+        const interval = setInterval(() => {
+        setCurrentTime((prev) => prev + 1);
+    }, 1000);
 
-    }, [isPlaying, currentTrack]);
+        return () => clearInterval(interval);
+      }, [isPlaying, currentTrack]);
+
+
+      useEffect(() => {
+        if(currentTime >= duration) {
+          dispatch(nextSong());
+
+        }
+      }, [currentTime, duration, dispatch]);
+
+      
 
 
     useEffect(() => {
       setCurrentTime(0);
     }, [currentIndex, queue]);
-    
-
-
-
-    
     
     const handlePlayPause = () => {
         if (!currentTrack) return;
@@ -95,7 +97,7 @@ function Player() {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            backgroundColor: '#181818',
+            backgroundColor: '#282828',
             color: '#fff',
             px: 2,
             py:1,

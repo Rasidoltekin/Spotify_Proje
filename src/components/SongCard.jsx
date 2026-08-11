@@ -2,20 +2,39 @@ import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { useDispatch } from 'react-redux';
-import { playTrack } from '../store/features/player/playerSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { playTrack, pauseSong, resumeSong } from '../store/features/player/playerSlice';
 import IconButton from '@mui/material/IconButton';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseIcon from '@mui/icons-material/Pause';
 import Box from '@mui/material/Box';
 
 
 function SongCard({ title, subtitle, image, queue, index}) {
   const dispatch = useDispatch();
 
+  const { queue: currentQueue, currentIndex, isPlaying } =useSelector((state)=> state.player);
+
+  const isThisTrack =
+    currentQueue &&
+    currentQueue.length > 0 &&
+    currentIndex === index &&
+    currentQueue[currentIndex]?.title === queue?.[index]?.title;
+    
+    const isThisPlaying = isThisTrack && isPlaying;
 
 
   const handleClick = () => {
-    dispatch(playTrack({queue, index}));
+    if (isThisTrack) {
+      if (isPlaying){
+        dispatch(pauseSong());
+      } else {
+        dispatch(resumeSong());
+      }
+    } else {
+      dispatch(playTrack({queue, index}));
+    }
+    
 
   };
 
@@ -23,12 +42,14 @@ function SongCard({ title, subtitle, image, queue, index}) {
         <Card 
           onClick= {handleClick}
         sx={{
-            width: { xs: 120, sm: 140, md: 160 },
+            width: { xs: 120, sm: 140, md: 203},
+            height: { xs: 175, sm: 215, md: 273},
             flexShrink: 0,
             backgroundColor: '#181818',
             borderRadius: 2,
             color: '#fff',
             cursor: 'pointer',
+            p: '16px',
             transition: 'transform 0.2s, background-color 0.2s',
             '&:hover':{
               transform:'scale(1.03)',
@@ -36,24 +57,31 @@ function SongCard({ title, subtitle, image, queue, index}) {
             },
         }}
         >
-          <Box sx={{ position:'relatice'}}>
+          <Box sx={{ position:'relative'}}>
 
           
             <CardMedia
             component="img"
-            height="160"
+            sx={{ width: '100%',
+              aspectRatio: '1 / 1',  
+              borderRadius: '4px', 
+            }}
             image={image}
             alt={title}
          />
 
             <IconButton
+             onClick={(e) => {
+              e.stopPropagation();
+              handleClick();
+             }}
             sx={{
               position: 'absolute',
             bottom: 8,
             right: 8,
             backgroundColor: '#1db954',
-            opacity: 0,
-            transform: 'translateY(8px)',
+            opacity: isThisPlaying ? 1 : 0,
+            transform: isThisPlaying ? 'translateY(0)' : 'translateY(8px)',
             transition: 'opacity 0.2s, transform 0.2s',
             '.MuiCard-root:hover &': {
               opacity: 1,
@@ -64,13 +92,17 @@ function SongCard({ title, subtitle, image, queue, index}) {
             },
             }}
             >
+              {isThisPlaying ? (
+                <PauseIcon sx={{ color:'#000'}}/>
+              ) : (
 
               <PlayArrowIcon sx={{ color:'#000'}}/>
+              )}
            </IconButton>
         </Box>
 
 
-         <CardContent>
+         <CardContent sx={{ p: '12px 0 0 0' }}> 
             <Typography
             variant="subtitle1"
             noWrap

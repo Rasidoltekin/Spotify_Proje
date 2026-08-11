@@ -8,13 +8,7 @@ function Library() {
 
   if (items.length === 0) {
     return(
-      <Box sx={{
-         backgroundColor: '#000',
-         color: '#fff',
-         minHeight: '100%',
-         p: 2,
-       }}
-      >
+      <Box>
         <Typography variant="h5" sx={{ mb: 2 }}>
           Kitaplığın 
         </Typography>
@@ -26,13 +20,7 @@ function Library() {
   }
 
   return ( 
-    <Box sx={{
-       backgroundColor: '#000',
-       color: '#fff',
-       minHeight: '100%',
-       p: 2,
-     }}
-    >
+    <Box >
       <Typography variant="h5" sx={{ mb: 2}}>
         Kitaplığın 
       </Typography>

@@ -16,6 +16,7 @@ import InputBase from '@mui/material/InputBase';
 import Drawer from '@mui/material/Drawer';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import SpotifyLogo from '../assets/spotify-logo.svg';
 
 function Sidebar( { mobileOpen, onClose} ) {
 
@@ -34,13 +35,6 @@ function Sidebar( { mobileOpen, onClose} ) {
     const filteredItems = items.filter((item) =>
     item.title.toLowerCase().includes(sidebarSearch.toLowerCase())
 );
-
-    
-
-    
-
-
-
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -50,12 +44,26 @@ function Sidebar( { mobileOpen, onClose} ) {
           <Box 
             sx={{
                 width: 240,
-                backgroundColor: '#000',
+                backgroundColor: '#030303',
                 color: '#fff',
                 minHeight: '100%',
                 py: 2,
+                
             }}
             >
+                
+        <Box sx={{
+            ml:3,
+            mt:5,
+            mb:5,
+        }}>
+            <img
+            src={SpotifyLogo}
+            alt="Spotify"
+            style={{ height: 42, width: 148,filter: 'invert(1) brightness(2)' }}
+          />
+        </Box>
+
             <List>
                 <ListItem onClick={() => navigate('/')}
                     sx={{
@@ -96,6 +104,7 @@ function Sidebar( { mobileOpen, onClose} ) {
                 <ListItem
                 onClick={() => navigate('/library')}
                 sx={{
+                    
                     cursor: 'pointer',
                     borderLeft: location.pathname === '/library' ? '4px solid #1db954' : '4px solid transparent',
                     backgroundColor: location.pathname === '/library' ? '#282828' : 'transparent',
@@ -141,13 +150,6 @@ function Sidebar( { mobileOpen, onClose} ) {
                 />
             </Box>
         
-
-
-
-
-
-
-
 
 
 

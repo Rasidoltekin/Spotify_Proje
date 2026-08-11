@@ -46,10 +46,10 @@ return (
 
   return(
     <Box>
-      <Typography variant="h5" sx={{ mb:2}}>
+      <Typography variant="h5" sx={{ mb:3, ml:4}}>
         Yakında Çalanlar
       </Typography>
-      <Box sx={{ display:'flex', gap: 2, overflowX:'auto', mb:4}}>
+      <Box sx={{ display:'flex', gap: 2,  flexWrap: 'wrap', mb:4, ml:4,}}>
         {recentlyPlayed.map((item, index)=> (
           <SongCard
           key={index}
@@ -64,10 +64,13 @@ return (
     </Box>
 
     
-      <Typography variant="h5" sx={{ mb:2}}>
+      <Typography variant="h5" sx={{ mb:3, ml:4}}>
         Tavsiye Edilenler 
       </Typography>
-      <Box sx={{ display:'flex', gap: 2, overflowX:'auto', mb:4}}>
+      <Typography variant="body2" sx={{ color:'#b3b3b3', mb:2, ml:4}}>
+        Sevdiğin her şeyden biraz dinle.
+      </Typography>
+      <Box sx={{ display:'flex', gap: 2,  flexWrap: 'wrap', mb:4, ml:4}}>
         {recommended.map((item, index)=> (
           <SongCard
           key={index}
